@@ -3,51 +3,34 @@ package projecteuler;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Euler010 {
+public class Euler011 {
     public static void main(String[] args) {
-        int max_n = 1000000;
-        int[] primes = new int[max_n];
-        long[] sumToN = new long[max_n];
-        Arrays.fill(primes, 1);
-        sumToN[0] = 0;
-        sumToN[1] = 1;
-
-        for (int i = 2; i < Math.sqrt(max_n); i++) {
-            if (primes[i] == 1) {
-                for (int j = i*i; j < max_n; j+=i) {
-                    primes[j] = 0;
-                }
-            }
-        }
-        for (int i = 3; i < max_n; i++) {
-            sumToN[i] = primes[i] == 1 ? sumToN[i - 1] + i : sumToN[i - 1];
-        }
-
         Scanner in = new Scanner(System.in);
-        int t = in.nextInt();
-        for(int a0 = 0; a0 < t; a0++){
-            int n = in.nextInt();
-            System.out.println(sumToN[n]);
+        int[][] grid = new int[20][20];
+        for (int grid_i = 0; grid_i < 20; grid_i++) {
+            for (int grid_j = 0; grid_j < 20; grid_j++) {
+                grid[grid_i][grid_j] = in.nextInt();
+            }
         }
-        /*System.out.println(sumPrimeLessThan(5, primes, marked));
-        System.out.println(sumPrimeLessThan(10, primes, marked));*/
-    }
 
-    private static long sumPrimeLessThan(int n, int[] primes, int[] marked) {
-        long sum = 0;
-        for (int i = 2; i <= n; i++) {
-            if (primes[i] == 1) {
-                sum += i;
-
-                if (marked[i] == 0) {
-                    for (int j = i+i; j <1000000; j+=i) {
-                        primes[j] = 0;
-                        marked[j] = 1;
-                    }
-                    marked[i] = 1;
+        int ma = 0;
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                if (j + 3 < 20) {
+                    ma = Math.max(ma, grid[i][j] * grid[i][j + 1] * grid[i][j + 2] * grid[i][j + 3]);
+                }
+                if (i + 3 < 20) {
+                    ma = Math.max(ma, grid[i][j] * grid[i + 1][j] * grid[i + 2][j] * grid[i + 3][j]);
+                }
+                if (i + 3 < 20 && j + 3 < 20) {
+                    ma = Math.max(ma, grid[i][j] * grid[i + 1][j + 1] * grid[i + 2][j + 2] * grid[i + 3][j + 3]);
+                }
+                if (i + 3 < 20 && j + 3 < 20) {
+                    ma = Math.max(ma, grid[i + 3][j] * grid[i + 2][j + 1] * grid[i + 1][j + 2] * grid[i][j + 3]);
                 }
             }
         }
-        return sum;
+
+        System.out.println(ma);
     }
 }
